@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700;800;900&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-low": "#f3f4f5",
+              "surface-container-high": "#e7e8e9",
+              "on-tertiary-fixed": "#410007",
+              "on-surface-variant": "#3e4850",
+              "error-container": "#ffdad6",
+              "surface-container": "#edeeef",
+              "primary-fixed-dim": "#83cfff",
+              "secondary-fixed-dim": "#b9c7e7",
+              "surface": "#f8f9fa",
+              "surface-container-lowest": "#ffffff",
+              "surface-bright": "#f8f9fa",
+              "on-surface": "#191c1d",
+              "primary": "#00658e",
+              "surface-variant": "#e1e3e4",
+              "error": "#ba1a1a",
+              "tertiary-container": "#ff5b61",
+              "inverse-on-surface": "#f0f1f2",
+              "secondary": "#515f7a",
+              "inverse-surface": "#2e3132",
+              "on-secondary-container": "#53617d",
+              "on-error": "#ffffff",
+              "surface-container-highest": "#e1e3e4",
+              "on-secondary-fixed-variant": "#394761",
+              "on-tertiary-fixed-variant": "#92001c",
+              "tertiary-fixed-dim": "#ffb3b1",
+              "on-primary": "#ffffff",
+              "outline-variant": "#bec8d1",
+              "on-primary-fixed": "#001e2e",
+              "tertiary-fixed": "#ffdad8",
+              "on-error-container": "#93000a",
+              "on-background": "#191c1d",
+              "on-primary-fixed-variant": "#004c6c",
+              "surface-dim": "#d9dadb",
+              "on-secondary-fixed": "#0c1b34",
+              "on-primary-container": "#003046",
+              "on-tertiary": "#ffffff",
+              "primary-fixed": "#c7e7ff",
+              "secondary-container": "#cfddfe",
+              "secondary-fixed": "#d7e2ff",
+              "surface-tint": "#00658e",
+              "inverse-primary": "#83cfff",
+              "background": "#f8f9fa",
+              "outline": "#6e7881",
+              "tertiary": "#bf0028",
+              "on-secondary": "#ffffff",
+              "on-tertiary-container": "#61000f",
+              "primary-container": "#009edb"
+            },
+            fontFamily: {
+              "headline": ["Public Sans"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Public Sans', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl fixed top-0 w-full z-50">
+<div class="flex justify-between items-center w-full px-6 py-4 mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-sky-600 dark:text-sky-400" data-icon="monitoring">monitoring</span>
+<h1 class="text-xl font-black text-sky-700 dark:text-sky-400 uppercase tracking-wider font-['Public_Sans']">Kenya Harvest Risk Monitor</h1>
+</div>
+<button class="hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400" data-icon="info">info</span>
+</button>
+</div>
+</header>
+<main class="pt-20 pb-12 px-4 max-w-md mx-auto space-y-6">
+<!-- Critical Alert Status -->
+<section class="bg-tertiary rounded-xl p-6 shadow-xl border-l-4 border-on-tertiary-fixed">
+<div class="flex items-start gap-4">
+<div class="bg-white/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-white" data-icon="warning" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-white/80 block mb-1">LOGISTICS INTERVENTION REQUIRED</span>
+<h2 class="text-white font-black leading-tight text-lg tracking-tight">PRE-POSITIONING RECOMMENDED: 50k MT urea at Mombasa</h2>
+<p class="text-white/90 text-xs mt-2 font-medium">Supply chain disruption threshold exceeded (&gt;10 day delays &amp; +42% price index).</p>
+</div>
+</div>
+</section>
+<!-- Supply Chain Map View -->
+<section class="bg-surface-container-lowest rounded-xl overflow-hidden">
+<div class="px-5 py-4 bg-surface-container-low flex justify-between items-center">
+<h3 class="text-xs font-bold uppercase tracking-widest text-secondary font-label">Regional Shipping Lanes</h3>
+<span class="bg-tertiary-container text-on-tertiary-container px-2 py-0.5 rounded text-[10px] font-bold">LIVE RISK</span>
+</div>
+<div class="relative aspect-square w-full bg-slate-200">
+<img class="w-full h-full object-cover grayscale contrast-125 opacity-80" data-alt="Satellite view of Gulf of Aden and Red Sea shipping routes" data-location="Gulf of Aden" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnraPE9SCBQlHJ11ZpMOnrrr0psAz-Hte9bfc9mELeTIz9uYZOfdHF9H9MFSSb4tB9wWxIpqDarNIQ6OaRxNmb2X7aOx5qh9ipaihO06A9qoxSwfsH5iyKkXFsdqUbmkpuiZ1t9gb_bPk6FNW6-bP8pAwxmSzQoUKzpOBzfJ0r_EDssh2h0xum_hupoUDn5KF5QAgvoCyqXwD_eYRG5qt2BZ5Ddbn2LQ38UzOu8AdxgofZhbVON7Fwv0JGd780b9tB5iWVpH7Epcrx"/>
+<!-- Map Markers -->
+<div class="absolute top-[35%] left-[45%] group">
+<div class="relative">
+<span class="absolute animate-ping inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="material-symbols-outlined text-tertiary text-2xl relative" data-icon="location_on" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-on-surface text-white text-[10px] py-1 px-2 rounded whitespace-nowrap font-bold">
+                        Port Sudan: 12d Delay
+                    </div>
+</div>
+<div class="absolute bottom-[30%] right-[20%]">
+<span class="material-symbols-outlined text-tertiary text-2xl" data-icon="location_on" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-on-surface text-white text-[10px] py-1 px-2 rounded whitespace-nowrap font-bold">
+                        Jebel Ali: 14d Delay
+                    </div>
+</div>
+<div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur p-3 rounded-lg shadow-sm border border-outline-variant/20">
+<p class="text-[10px] font-bold text-secondary uppercase tracking-tighter">Current Vessel Delays</p>
+<p class="text-lg font-black text-on-surface">11.4 Days Avg</p>
+</div>
+</div>
+</section>
+<!-- Fertilizer Price Index Chart -->
+<section class="bg-surface-container-lowest rounded-xl p-6">
+<div class="flex justify-between items-end mb-6">
+<div>
+<h3 class="text-xs font-bold uppercase tracking-widest text-secondary font-label">Urea Price Index</h3>
+<p class="text-2xl font-black text-primary tracking-tight">$642.50 <span class="text-xs font-normal text-tertiary">+42.1%</span></p>
+</div>
+<div class="text-right">
+<span class="text-[10px] font-medium text-outline block">WORLD BANK DATA</span>
+</div>
+</div>
+<!-- Simplified Vector Chart Area -->
+<div class="h-32 w-full relative flex items-end gap-1">
+<div class="absolute inset-0 border-b border-outline-variant/30 flex flex-col justify-between py-2">
+<div class="w-full border-t border-tertiary/40 border-dashed relative">
+<span class="absolute -top-2 right-0 text-[8px] font-bold text-tertiary bg-surface-container-lowest px-1">40% THRESHOLD</span>
+</div>
+<div class="w-full border-t border-outline-variant/10"></div>
+<div class="w-full border-t border-outline-variant/10"></div>
+</div>
+<!-- Chart Path Visualization (Simulated with div bars for mobile clarity) -->
+<div class="flex-1 bg-primary/10 rounded-t-sm h-[40%]"></div>
+<div class="flex-1 bg-primary/10 rounded-t-sm h-[45%]"></div>
+<div class="flex-1 bg-primary/10 rounded-t-sm h-[50%]"></div>
+<div class="flex-1 bg-primary/10 rounded-t-sm h-[55%]"></div>
+<div class="flex-1 bg-primary/10 rounded-t-sm h-[48%]"></div>
+<div class="flex-1 bg-primary/10 rounded-t-sm h-[60%]"></div>
+<div class="flex-1 bg-tertiary rounded-t-sm h-[85%] relative">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-tertiary">CURRENT</div>
+</div>
+</div>
+<div class="flex justify-between mt-2 text-[10px] font-bold text-outline">
+<span>6MO AVG: $452.10</span>
+<span>MAY 2024</span>
+</div>
+</section>
+<!-- Maize Planting Progress -->
+<section class="bg-surface-container-lowest rounded-xl p-6">
+<h3 class="text-xs font-bold uppercase tracking-widest text-secondary font-label mb-4">Maize Planting Progress</h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-xs font-bold mb-2">
+<span class="text-on-surface">Current Season (2024)</span>
+<span class="text-primary">1.8M Hectares</span>
+</div>
+<div class="h-3 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 62%"></div>
+</div>
+</div>
+<div class="pt-2">
+<div class="flex justify-between text-xs font-medium mb-2 text-outline">
+<span>5-Year Historic Average</span>
+<span>2.1M Hectares</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-outline-variant rounded-full" style="width: 75%"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-3 rounded-lg flex items-center gap-3 mt-4">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="analytics">analytics</span>
+<p class="text-[11px] text-on-surface-variant leading-relaxed">
+                        Planting is <span class="font-bold text-tertiary">14% behind schedule</span> compared to the 5-year mean due to localized seed shortages.
+                    </p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-8 py-6 gap-4">
+<div class="flex flex-col items-center md:items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100 font-headline">KENYA HARVEST MONITOR</span>
+<p class="font-['Inter'] text-xs font-medium uppercase tracking-widest leading-loose text-slate-500 dark:text-slate-400">Last updated: 2h ago | Confidence: 78%</p>
+</div>
+<nav class="flex gap-6">
+<a class="font-['Inter'] text-xs font-medium uppercase tracking-widest leading-loose text-slate-500 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors" href="#">Methodology</a>
+<a class="font-['Inter'] text-xs font-medium uppercase tracking-widest leading-loose text-slate-500 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors" href="#">Data Sources</a>
+<a class="font-['Inter'] text-xs font-medium uppercase tracking-widest leading-loose text-slate-500 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-300 transition-colors" href="#">Contact Support</a>
+</nav>
+</div>
+</footer>
+<!-- Mobile Bottom Navigation Shell (Consistent with UI patterns) -->
+<nav class="fixed bottom-0 w-full bg-white/90 backdrop-blur-xl border-t border-slate-100 md:hidden z-50 flex justify-around items-center py-3">
+<button class="flex flex-col items-center gap-1 text-sky-700 font-bold">
+<span class="material-symbols-outlined" data-icon="dashboard" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="text-[10px] uppercase tracking-tighter">Dashboard</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined" data-icon="public">public</span>
+<span class="text-[10px] uppercase tracking-tighter">Logistics</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="text-[10px] uppercase tracking-tighter">Reserves</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[10px] uppercase tracking-tighter">Alerts</span>
+</button>
+</nav>
+</body></html>
