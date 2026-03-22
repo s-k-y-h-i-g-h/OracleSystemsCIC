@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hunger Hotspot Reporter - Prototype</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-sA+e2SxZfJztSiH8LZQK3hB+L8lGqrUlnTxJpVEyEAI="
+      crossorigin=""
+    />
+    <!-- Leaflet JS -->
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-o9N1j4eZfJytSiH8LZQK3hB+L8lGqrUlnTxJpVEyEAI="
+      crossorigin=""
+    ></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -19,15 +32,9 @@
         <p class="text-sm text-gray-500">Tap map to report → Fill form → Submit</p>
     </header>
 
-    <!-- Map Area (Simplified for prototype) -->
+    <!-- Map Area -->
     <section class="flex-1 relative">
-        <div id="map" class="w-full h-full bg-gradient-to-b from-blue-50 to-indigo-50">
-            <!-- In real version: Leaflet/Google Maps would go here -->
-            <div class="absolute inset-0 flex items-center justify-center text-gray-400">
-                <span class="material-icons">map</span>
-                <span class="ml-2">Click to drop pin → Form appears</span>
-            </div>
-        </div>
+        <div id="map" class="w-full h-full"></div>
         <!-- Form Container (Hidden by default) -->
         <div id="formContainer" class="absolute inset-0 bg-white/90 backdrop-blur-sm hidden">
             <form id="hotspotForm" class="p-6 space-y-4">
@@ -111,25 +118,42 @@
     </footer>
 
     <script>
-        // Simple state management for prototype
+        // Initialize Leaflet map
+        const map = L.map('map').setView([0.5, 34.0], 6); // Centered on East Africa
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // State management
         let reports = [
-            {
-                id: 1,
-                type: 'Drought Alert',
-                location: 'Mandera County',
-                description: 'Severe water shortage affecting livestock',
-                severity: 4,
-                timestamp: Date.now() - (12 * 60 * 1000) // 12 minutes ago
-            },
-            {
-                id: 2,
-                type: 'Supply Chain Gap',
-                location: 'Mogadishu Port',
-                description: 'Fertilizer delays causing planting concerns',
-                severity: 2,
-                timestamp: Date.now() - (60 * 60 * 1000) // 1 hour ago
-            }
+          {
+            id: 1,
+            type: 'Drought Alert',
+            location: 'Mandera County',
+            description: 'Severe water shortage affecting livestock',
+            severity: 4,
+            timestamp: Date.now() - (12 * 60 * 1000), // 12 minutes ago
+            latitude: 1.6,
+            longitude: 35.6,
+            locationPrecision: 'GPS'
+          },
+          {
+            id: 2,
+            type: 'Supply Chain Gap',
+            location: 'Mogadishu Port',
+            description: 'Fertilizer delays causing planting concerns',
+            severity: 2,
+            timestamp: Date.now() - (60 * 60 * 1000), // 1 hour ago
+            latitude: 2.0,
+            longitude: 45.3,
+            locationPrecision: 'GPS'
+          }
         ];
+
+        let currentMarker = null; // Currently selected marker
+        let pendingMarker = null; // Marker showing where user clicked
 
         const formContainer = document.getElementById('formContainer');
         const hotspotForm = document.getElementById('hotspotForm');
@@ -144,121 +168,197 @@
 
         // Update character count
         descInput.addEventListener('input', () => {
-            charCount.textContent = `${descInput.value.length}/100`;
+          charCount.textContent = `${descInput.value.length}/100`;
         });
 
         // Update severity display
         severitySlider.addEventListener('input', () => {
-            severityValue.textContent = `Level ${severitySlider.value}`;
+          severityValue.textContent = `Level ${severitySlider.value}`;
         });
 
-        // Show form when clicking map (simplified for prototype)
-        mapArea.addEventListener('click', () => {
-            formContainer.classList.remove('hidden');
-            // In real version: this would drop a pin at click location
+        // Handle map click - show form at clicked location
+        map.on('click', (e) => {
+          const { lat, lng } = e.latlng;
+
+          // Remove any pending marker
+          if (pendingMarker) {
+            map.removeLayer(pendingMarker);
+          }
+
+          // Add a temporary marker at click location
+          pendingMarker = L.circleMarker([lat, lng], {
+            radius: 8,
+            color: '#ff7800',
+            weight: 2,
+            opacity: 0.8,
+            fillOpacity: 0.6
+          }).addTo(map);
+
+          // Store coordinates for form submission
+          window.latestLat = lat;
+          window.latestLng = lng;
+
+          // Show the form
+          formContainer.classList.remove('hidden');
+          // Optionally pan to keep marker visible
+          map.panTo([lat, lng]);
         });
 
         // Hide form
         cancelBtn.addEventListener('click', () => {
-            formContainer.classList.add('hidden');
-            hotspotForm.reset();
-            charCount.textContent = '0/100';
-            severitySlider.value = 3;
-            severityValue.textContent = 'Level 3';
+          formContainer.classList.add('hidden');
+          hotspotForm.reset();
+          charCount.textContent = '0/100';
+          severitySlider.value = 3;
+          severityValue.textContent = 'Level 3';
+          
+          // Remove pending marker
+          if (pendingMarker) {
+            map.removeLayer(pendingMarker);
+            pendingMarker = null;
+          }
         });
 
         // Handle form submission
         hotspotForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            // Validate
-            const issueType = document.getElementById('issueType').value;
-            const description = descInput.value.trim();
-            if (!issueType || !description) {
-                alert('Please select an issue type and provide a description');
-                return;
-            }
-            
-            // Create new report
-            const newReport = {
-                id: Date.now(),
-                type: issueType,
-                location: 'Reported Location', // In real version: use GPS coordinates
-                description: description,
-                severity: parseInt(severitySlider.value),
-                timestamp: Date.now()
-            };
-            
-            // Add to reports (most recent first)
-            reports.unshift(newReport);
-            
-            // Update UI
-            renderReports();
-            
-            // Reset form and hide
-            formContainer.classList.add('hidden');
-            hotspotForm.reset();
-            charCount.textContent = '0/100';
-            severitySlider.value = 3;
-            severityValue.textContent = 'Level 3';
-            
-            // Show success feedback
-            submitBtn.textContent = 'Submitted!';
-            submitBtn.disabled = true;
-            setTimeout(() => {
-                submitBtn.textContent = 'Submit Report';
-                submitBtn.disabled = false;
-            }, 1500);
+          e.preventDefault();
+          
+          // Validate
+          const issueType = document.getElementById('issueType').value;
+          const description = descInput.value.trim();
+          if (!issueType || !description) {
+            alert('Please select an issue type and provide a description');
+            return;
+          }
+          
+          // Create new report
+          const newReport = {
+            id: Date.now(),
+            type: issueType,
+            location: 'Reported Location',
+            description: description,
+            severity: parseInt(severitySlider.value),
+            timestamp: Date.now(),
+            // Geolocation from map click
+            latitude: window.latestLat || 0,
+            longitude: window.latestLng || 0,
+            locationPrecision: window.latestLat && window.latestLng ? 'GPS' : 'Approximate'
+          };
+          
+          // Add to reports (most recent first)
+          reports.unshift(newReport);
+          
+          // Update UI
+          renderReports();
+          renderMapMarkers();
+          
+          // Reset form and hide
+          formContainer.classList.add('hidden');
+          hotspotForm.reset();
+          charCount.textContent = '0/100';
+          severitySlider.value = 3;
+          severityValue.textContent = 'Level 3';
+          
+          // Remove pending marker
+          if (pendingMarker) {
+            map.removeLayer(pendingMarker);
+            pendingMarker = null;
+          }
+          
+          // Show success feedback
+          submitBtn.textContent = 'Submitted!';
+          submitBtn.disabled = true;
+          setTimeout(() => {
+            submitBtn.textContent = 'Submit Report';
+            submitBtn.disabled = false;
+          }, 1500);
         });
 
         // Render reports list
         function renderReports() {
-            reportsList.innerHTML = '';
-            if (reports.length === 0) {
-                reportsList.innerHTML = '<p class="text-gray-500 text-center py-4">No reports yet</p>';
-                return;
-            }
+          reportsList.innerHTML = '';
+          if (reports.length === 0) {
+            reportsList.innerHTML = '<p class="text-gray-500 text-center py-4">No reports yet</p>';
+            return;
+          }
+          
+          reports.slice(0, 5).forEach(report => { // Show max 5 recent
+            const severityClass = report.severity >= 4 ? 'border-red-500' : 
+                                report.severity >= 3 ? 'border-yellow-500' : 'border-green-500';
+            const severityDotClass = report.severity >= 4 ? 'bg-red-500' : 
+                                   report.severity >= 3 ? 'bg-yellow-500' : 'bg-green-500';
             
-            reports.slice(0, 5).forEach(report => { // Show max 5 recent
-                const severityClass = report.severity >= 4 ? 'border-red-500' : 
-                                    report.severity >= 3 ? 'border-yellow-500' : 'border-green-500';
-                const severityDotClass = report.severity >= 4 ? 'bg-red-500' : 
-                                       report.severity >= 3 ? 'bg-yellow-500' : 'bg-green-500';
-                
-                const reportEl = document.createElement('div');
-                reportEl.className = `p-3 bg-gray-50 rounded-lg border-l-4 ${severityClass}`;
-                reportEl.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div class="flex-1">
-                            <div class="flex justify-between">
-                                <span class="font-medium text-gray-800">${report.type}</span>
-                                <span class="text-sm text-gray-500">${report.location}</span>
-                            </div>
-                            <p class="text-sm text-gray-600">${report.description} • ${formatTimeAgo(report.timestamp)}</p>
-                        </div>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[${severityDotClass.slice(4, -1)}]-100 text-[${severityDotClass.slice(4, -1)}]-800">
-                            ●
-                        </span>
-                    </div>
-                `;
-                reportsList.appendChild(reportEl);
-            });
+            const reportEl = document.createElement('div');
+            reportEl.className = `p-3 bg-gray-50 rounded-lg border-l-4 ${severityClass}`;
+            reportEl.innerHTML = `
+              <div class="flex justify-between items-start">
+                <div class="flex-1">
+                  <div class="flex justify-between">
+                    <span class="font-medium text-gray-800">${report.type}</span>
+                    <span class="text-sm text-gray-500">${report.location}</span>
+                  </div>
+                  <p class="text-sm text-gray-600">${report.description} • ${formatTimeAgo(report.timestamp)}</p>
+                </div>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[${severityDotClass.slice(4, -1)}]-100 text-[${severityDotClass.slice(4, -1)}]-800">
+                  ●
+                </span>
+              </div>
+            `;
+            reportsList.appendChild(reportEl);
+          });
+        }
+
+        // Render all reports as markers on the map
+        function renderMapMarkers() {
+          // Clear existing markers (except pending one)
+          map.eachLayer((layer) => {
+            if (layer !== pendingMarker && !(layer instanceof L.TileLayer)) { // Keep base tile layer
+              map.removeLayer(layer);
+            }
+          });
+          
+          // Add each report as a marker
+          reports.forEach(report => {
+            if (report.latitude && report.longitude && 
+                report.latitude !== 0 && report.longitude !== 0) {
+              
+              // Determine marker color by severity
+              let markerColor = '#green';
+              if (report.severity >= 4) markerColor = '#red';
+              else if (report.severity >= 3) markerColor = '#orange';
+              
+              const marker = L.circleMarker([report.latitude, report.longitude], {
+                radius: 6,
+                color: markerColor,
+                weight: 2,
+                opacity: 0.8,
+                fillOpacity: 0.6
+              }).addTo(map)
+                .bindPopup(`
+                  <b>${report.type}</b><br>
+                  ${report.description}<br>
+                  <small>${formatTimeAgo(report.timestamp)}</small>
+                  <br><small>Location: ${report.locationPrecision}</small>
+                `);
+            }
+          });
         }
 
         // Helper function for time ago display
         function formatTimeAgo(timestamp) {
-            const seconds = Math.floor((Date.now() - timestamp) / 1000);
-            if (seconds < 60) return `${seconds}s ago`;
-            const minutes = Math.floor(seconds / 60);
-            if (minutes < 60) return `${minutes}m ago`;
-            const hours = Math.floor(minutes / 60);
-            if (hours < 24) return `${hours}h ago`;
-            const days = Math.floor(hours / 24);
-            return `${days}d ago`;
+          const seconds = Math.floor((Date.now() - timestamp) / 1000);
+          if (seconds < 60) return `${seconds}s ago`;
+          const minutes = Math.floor(seconds / 60);
+          if (minutes < 60) return `${minutes}m ago`;
+          const hours = Math.floor(minutes / 60);
+          if (hours < 24) return `${hours}h ago`;
+          const days = Math.floor(hours / 24);
+          return `${days}d ago`;
         }
 
         // Initialize
         renderReports();
+        renderMapMarkers();
     </script>
 </body>
 </html>
