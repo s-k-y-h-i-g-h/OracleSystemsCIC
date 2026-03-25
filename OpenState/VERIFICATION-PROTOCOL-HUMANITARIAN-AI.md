@@ -106,6 +106,15 @@ To ensure AI systems used in humanitarian contexts are verified, transparent, an
 - [ ] Validate power requirements match field conditions
 - [ ] Check data privacy protections for beneficiary information
 
+### Dual-Threat/Opportunity Monitoring
+- [ ] **Threat Signal Validation** - Verify systems detect rising risks/harms with ground truth confirmation
+- [ ] **Opportunity Signal Detection** - Monitor for improving conditions, alternative solutions, or de-escalation tendencies
+- [ ] **Signal Triangulation** - Cross-verify both threat and opportunity signals using multiple independent sources
+- [ ] **Bias Screening** - Assess whether threat/opportunity classifications are influenced by perceptual or cultural biases
+- [ ] **Temporal Tracking** - Monitor how threat/opportunity balances evolve over time to avoid snap judgments
+- [ ] **Community Validation** - Confirm with affected populations whether perceived threats/opportunities match lived experience
+- [ ] **Resource Allocation Equity** - Ensure protective actions and support mechanisms are distributed based on verified need, not threat perception alone
+
 ## Documentation Requirements
 
 For any humanitarian AI system, maintain:
