@@ -6,6 +6,12 @@ AI-powered epistemic infrastructure — tools and systems that make information 
 
 To build the verification layer the internet is missing: independent, transparent, and accessible to all.
 
+## Why This Exists
+
+Most people can't verify what they read. They lack the time, tools, and independent sources to check whether a claim is true. Meanwhile, AI-generated content is getting cheaper and more convincing — the gap between verified and fabricated is closing fast.
+
+We're building the infrastructure to close that gap: so that anyone, anywhere, can know whether what they're reading is confirmed, disputed, or unverified — without needing to become a researcher.
+
 ## Structure
 
 Oracle Systems CIC is a Community Interest Company. All profits are either:
@@ -17,7 +23,20 @@ The self++ Foundation (longevity for all, biohacking accessibility) is the chari
 ## Products & Projects
 
 ### ClaimCheck (in development)
-Browser extension + backend that verifies YouTube video titles against multiple independent sources. Uses a tri-source confirmation model — a claim is considered verified when at least three independent sources confirm it.
+A browser extension + backend that verifies claims on any web page you visit — news articles, videos, blog posts, social media — against multiple independent sources.
+
+**How it works:**
+1. Extract the core factual claim from the page or title
+2. Cross-confirm against independent sources using tri-source confirmation (3+ independent sources must confirm before marking as verified)
+3. Surface the result inline: Verified / Disputed / Unverified / Unsupported
+
+**Why "every web page" not just YouTube:**
+- YouTube titles are one surface — the web is the actual problem space
+- The core mechanic (extract → cross-confirm → report) is the same everywhere
+- "Claim verification for the entire web" is the real product
+- YouTube is the first integration; the architecture is source-agnostic from day one
+
+**Verification standard:** A claim is "verified" only when at least three independent sources confirm it. This is not a popularity contest — sources must be genuinely independent, not parroting the same original claim.
 
 ### OpenClaw Agent Services
 Custom AI agent development and deployment for businesses, charities, and public sector organisations. Built on the OpenClaw platform. Ready to offer once CIC is registered.
@@ -30,7 +49,7 @@ OracleSystemsCIC/
 ├── registry/
 │   ├── selfplusplus-foundation-registration.md   ← charity CIO application
 │   └── oracle-systems-cic-registration.md       ← CIC incorporation application
-├── ClaimCheck/                 ← YouTube verification tool (in development)
+├── ClaimCheck/                 ← ClaimCheck verification tool (in development)
 └── agent-services/            ← OpenClaw client work (to be added)
 ```
 
@@ -38,9 +57,18 @@ OracleSystemsCIC/
 
 - **CIC registration:** In progress — registry/oracle-systems-cic-registration.md
 - **Charity (self++ Foundation) registration:** In progress — registry/selfplusplus-foundation-registration.md
-- **ClaimCheck:** Concept stage
+- **ClaimCheck:** Concept stage — design in progress
 - **OpenClaw Agent Services:** Ready to offer once CIC is registered
 
-## Getting Involved
+## Feedback & Collaboration
 
-This is an open project. If you're interested in verification tools, epistemic infrastructure, or AI for public good — reach out.
+This is early-stage work. We're sharing it publicly because we believe verification infrastructure should be a public good — and because we'd rather hear what's broken from real people before we go too far down the wrong path.
+
+If you're building in this space, have thoughts on the architecture, or want to collaborate — reach out.
+
+## Principles
+
+- **Tri-source confirmation:** Nothing is verified until multiple independent sources agree
+- **Source independence:** Three articles citing the same original report does not count as three sources
+- **Radical transparency:** Users see what sources confirmed or disputed a claim, not just a verdict
+- **Accessibility first:** The verification layer should be usable by anyone, not just researchers
