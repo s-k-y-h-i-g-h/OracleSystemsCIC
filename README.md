@@ -49,6 +49,8 @@ OracleSystemsCIC/
 ├── registry/
 │   ├── selfplusplus-foundation-registration.md   ← charity CIO application
 │   └── oracle-systems-cic-registration.md       ← CIC incorporation application
+├── security/
+│   └── OWASP-LLM-Top10-Reference.md  ← agent security threat model
 ├── ClaimCheck/                 ← ClaimCheck verification tool (in development)
 └── agent-services/            ← OpenClaw client work (to be added)
 ```
@@ -65,6 +67,14 @@ OracleSystemsCIC/
 This is early-stage work. We're sharing it publicly because we believe verification infrastructure should be a public good — and because we'd rather hear what's broken from real people before we go too far down the wrong path.
 
 If you're building in this space, have thoughts on the architecture, or want to collaborate — reach out.
+
+## Security
+
+Agent-based AI systems have specific attack surfaces. We track the OWASP LLM Top 10 (2025) as a security reference for all agent development work — particularly relevant to ClaimCheck and autonomous agent systems:
+
+- [OWASP LLM Top 10 Security Reference](security/OWASP-LLM-Top10-Reference.md)
+
+Key concerns: prompt injection, excessive agency, and misinformation. We design all agents with strict input sanitisation, minimal agency, and verification loops.
 
 ## Principles
 
